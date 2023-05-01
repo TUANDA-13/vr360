@@ -12,9 +12,15 @@ import ScreenPicker from "./components/ScreenPicker";
 import Zoom from "./components/Zoom";
 import "./index.scss";
 import { constants } from "../../constants";
+import { useGetAllPlacesQuery } from "../../services/placeApi";
+import { useSelector } from "react-redux";
 
 export const MapContext = createContext(null);
 const Map = () => {
+  const { data } = useGetAllPlacesQuery();
+  console.log(data);
+  const reduxData = useSelector((state) => state);
+  console.log(reduxData)
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [mapContextValue, setMapContextValue] = useState(null);
@@ -66,6 +72,25 @@ const Map = () => {
           ],
         },
       });
+      (map.current as any).addSource("markerss", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: {
+                "marker-type": "blue",
+                icon: "map-marker-blue",
+              },
+              geometry: {
+                type: "Point",
+                coordinates: [120.84228515625, 21.022982546427425],
+              },
+            },
+          ],
+        },
+      });
 
       (map.current as any).addLayer({
         id: "markers",
@@ -78,218 +103,229 @@ const Map = () => {
           "icon-size": 1,
         },
       });
-
-      (map.current as any).addSource("earthquakes", {
-        type: "geojson",
-        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
-        data: {
-          type: "FeatureCollection",
-          crs: {
-            type: "name",
-            properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
-          },
-          features: [
-            {
-              type: "Feature",
-              properties: {
-                id: "ak16994521",
-                mag: 2.3,
-                time: 1507425650893,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-151.5129, 63.1016, 0.0],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "ak16994519",
-                mag: 1.7,
-                time: 1507425289659,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-150.4048, 63.1224, 105.5],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "ak16994517",
-                mag: 1.6,
-                time: 1507424832518,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-151.3597, 63.0781, 0.0],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "ci38021336",
-                mag: 1.42,
-                time: 1507423898710,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-118.497, 34.299667, 7.64],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "us2000b2nn",
-                mag: 4.2,
-                time: 1507422626990,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-87.6901, 12.0623, 46.41],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "ak16994510",
-                mag: 1.6,
-                time: 1507422449194,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-151.5053, 63.0719, 0.0],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "us2000b2nb",
-                mag: 4.6,
-                time: 1507420784440,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-178.4576, -20.2873, 614.26],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "ak16994298",
-                mag: 2.4,
-                time: 1507419370097,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-148.789, 63.1725, 7.5],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "nc72905861",
-                mag: 1.39,
-                time: 1507418785100,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-120.993164, 36.421833, 6.37],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                id: "ci38021304",
-                mag: 1.11,
-                time: 1507418426010,
-                felt: null,
-                tsunami: 0,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [-117.0155, 33.656333, 12.37],
-              },
-            },
-          ],
-        },
-        cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
-      });
       (map.current as any).addLayer({
-        id: "clusters",
-        type: "circle",
-        source: "earthquakes",
-        filter: ["has", "point_count"],
-        paint: {
-          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-          // with three steps to implement three types of circles:
-          //   * Blue, 20px circles when point count is less than 100
-          //   * Yellow, 30px circles when point count is between 100 and 750
-          //   * Pink, 40px circles when point count is greater than or equal to 750
-          "circle-color": [
-            "step",
-            ["get", "point_count"],
-            "#51bbd6",
-            100,
-            "#f1f075",
-            750,
-            "#f28cb1",
-          ],
-          "circle-radius": [
-            "step",
-            ["get", "point_count"],
-            20,
-            100,
-            30,
-            750,
-            40,
-          ],
-        },
-      });
-      (map.current as any).addLayer({
-        id: "cluster-count",
+        id: "markerss",
         type: "symbol",
-        source: "earthquakes",
-        filter: ["has", "point_count"],
+        source: "markerss",
         layout: {
-          "text-field": ["get", "point_count_abbreviated"],
-          "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-          "text-size": 12,
+          // 'icon-image': ['match', ['get', 'marker-type'], 'red', 'map-marker-red', 'map-marker-blue'],
+          "icon-image": "{icon}",
+          "icon-allow-overlap": true,
+          "icon-size": 1,
         },
       });
-      (map.current as any).addLayer({
-        id: "unclustered-point",
-        type: "circle",
-        source: "earthquakes",
-        filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": "#11b4da",
-          "circle-radius": 4,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff",
-        },
-      });
+
+      // (map.current as any).addSource("earthquakes", {
+      //   type: "geojson",
+      //   // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+      //   // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+      //   data: {
+      //     type: "FeatureCollection",
+      //     crs: {
+      //       type: "name",
+      //       properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+      //     },
+      //     features: [
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "ak16994521",
+      //           mag: 2.3,
+      //           time: 1507425650893,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-151.5129, 63.1016, 0.0],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "ak16994519",
+      //           mag: 1.7,
+      //           time: 1507425289659,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-150.4048, 63.1224, 105.5],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "ak16994517",
+      //           mag: 1.6,
+      //           time: 1507424832518,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-151.3597, 63.0781, 0.0],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "ci38021336",
+      //           mag: 1.42,
+      //           time: 1507423898710,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-118.497, 34.299667, 7.64],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "us2000b2nn",
+      //           mag: 4.2,
+      //           time: 1507422626990,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-87.6901, 12.0623, 46.41],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "ak16994510",
+      //           mag: 1.6,
+      //           time: 1507422449194,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-151.5053, 63.0719, 0.0],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "us2000b2nb",
+      //           mag: 4.6,
+      //           time: 1507420784440,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-178.4576, -20.2873, 614.26],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "ak16994298",
+      //           mag: 2.4,
+      //           time: 1507419370097,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-148.789, 63.1725, 7.5],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "nc72905861",
+      //           mag: 1.39,
+      //           time: 1507418785100,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-120.993164, 36.421833, 6.37],
+      //         },
+      //       },
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           id: "ci38021304",
+      //           mag: 1.11,
+      //           time: 1507418426010,
+      //           felt: null,
+      //           tsunami: 0,
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [-117.0155, 33.656333, 12.37],
+      //         },
+      //       },
+      //     ],
+      //   },
+      //   cluster: true,
+      //   clusterMaxZoom: 14, // Max zoom to cluster points on
+      //   clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+      // });
+      // (map.current as any).addLayer({
+      //   id: "clusters",
+      //   type: "circle",
+      //   source: "earthquakes",
+      //   filter: ["has", "point_count"],
+      //   paint: {
+      //     // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+      //     // with three steps to implement three types of circles:
+      //     //   * Blue, 20px circles when point count is less than 100
+      //     //   * Yellow, 30px circles when point count is between 100 and 750
+      //     //   * Pink, 40px circles when point count is greater than or equal to 750
+      //     "circle-color": [
+      //       "step",
+      //       ["get", "point_count"],
+      //       "#51bbd6",
+      //       100,
+      //       "#f1f075",
+      //       750,
+      //       "#f28cb1",
+      //     ],
+      //     "circle-radius": [
+      //       "step",
+      //       ["get", "point_count"],
+      //       20,
+      //       100,
+      //       30,
+      //       750,
+      //       40,
+      //     ],
+      //   },
+      // });
+      // (map.current as any).addLayer({
+      //   id: "cluster-count",
+      //   type: "symbol",
+      //   source: "earthquakes",
+      //   filter: ["has", "point_count"],
+      //   layout: {
+      //     "text-field": ["get", "point_count_abbreviated"],
+      //     "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+      //     "text-size": 12,
+      //   },
+      // });
+      // (map.current as any).addLayer({
+      //   id: "unclustered-point",
+      //   type: "circle",
+      //   source: "earthquakes",
+      //   filter: ["!", ["has", "point_count"]],
+      //   paint: {
+      //     "circle-color": "#11b4da",
+      //     "circle-radius": 4,
+      //     "circle-stroke-width": 1,
+      //     "circle-stroke-color": "#fff",
+      //   },
+      // });
       // inspect a cluster on click
       (map.current as any).on("click", "clusters", (e: any) => {
         const features = (map.current as any).queryRenderedFeatures(e.point, {
@@ -345,17 +381,14 @@ const Map = () => {
     (map.current as any).on("mouseleave", "markers", () => {
       (map.current as any).getCanvas().style.cursor = "";
     });
-    (map.current as any).on("zoom", () => {
-      console.log("a");
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    (map.current as any).on("zoom", () => {});
   }, []);
 
   useEffect(() => {
     const showSummaryPopup = (lngLat: any) => {
       const popup = new mapboxgl.Popup({
         className: "info-popup",
-        maxWidth: "300px",
+        maxWidth: "400px",
       });
       const popupContent = document.createElement("div");
       popupContent.className = "info-popup-container";
@@ -365,7 +398,9 @@ const Map = () => {
       const coordinates = e.features[0].geometry.coordinates.slice();
       showSummaryPopup(coordinates);
       const root = document.getElementsByClassName("info-popup-container")[0];
-      ReactDOM.createRoot(root).render(<LocationInformationCard />);
+      ReactDOM.createRoot(root).render(
+        <LocationInformationCard/>
+      );
     };
 
     (map.current as any).on("click", "markers", onMarkerClick);
