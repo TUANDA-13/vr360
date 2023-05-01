@@ -67,7 +67,6 @@ const Map = () => {
         },
       });
 
-      
       (map.current as any).addLayer({
         id: "markers",
         type: "symbol",
@@ -79,7 +78,7 @@ const Map = () => {
           "icon-size": 1,
         },
       });
-      
+
       (map.current as any).addSource("earthquakes", {
         type: "geojson",
         // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
@@ -349,6 +348,7 @@ const Map = () => {
     (map.current as any).on("zoom", () => {
       console.log("a");
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
