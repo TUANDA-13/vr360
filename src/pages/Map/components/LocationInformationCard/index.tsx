@@ -11,7 +11,6 @@ import {
   TableRow,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import ChuaLinhUng from "../../../../assets/images/chualinhung.jpg"
 import "./index.scss";
 
 const StyledButton = styled(Button)({
@@ -36,6 +35,37 @@ const StyledButton = styled(Button)({
 });
 
 const LocationInformationCard = () => {
+  const place = {
+    id: "60786bf8-62f2-457b-8100-60360069b787",
+    category: {
+      id: "6be61a5f-27be-4f16-a3a9-6a64f7bf0b79",
+      title: "Du lịch",
+      description:
+        "Hàng trăm danh lam thắng cảnh, khu vui chơi có thể cho bạn khám phá ở Đà Nẵng.",
+    },
+    information: [
+      {
+        id: "1",
+        title: "Thành phố",
+        description: "Đà Nẵng",
+      },
+      {
+        id: "2",
+        title: "Mô tả",
+        description:
+          "Chùa Linh Ứng là một ngôi chùa nằm trên dãy núi Sơn Trà, thuộc địa bàn xã Hòa Hải, huyện Ngũ Hành Sơn, thành phố Đà Nẵng. Ngôi chùa này được xây dựng từ thế kỷ XVIII và được coi là một trong những ngôi chùa lớn và đẹp nhất tại Đà Nẵng.",
+      },
+    ],
+    created_at: "2023-05-01T18:20:05+07:00",
+    updated_at: "2023-05-03T14:42:55.396402+07:00",
+    name: "Chùa Linh Ứng",
+    description: "",
+    thumbnail:
+      "http://localhost:8000/media/places/chua-linh-ung/1dd865fa-e986-11ed-b982-94e6f7246854.jpg",
+    lat: 16.10031719989777,
+    lng: 108.27774682373854,
+    slug: "chua-linh-ung",
+  };
   const handleClickButtonViewMore = () => {
     window.open("http://localhost:3000/virtual-tourism-3d", "_blank");
   };
@@ -49,7 +79,7 @@ const LocationInformationCard = () => {
         Thông tin chi tiết
       </Box>
       <Box component="div" className="card-container-image">
-        <img src={ChuaLinhUng} alt="city" width="100%" />
+        <img src={place.thumbnail} alt="place" width="100%" />
       </Box>
       <Box component="div" className="card-container-content">
         <TableContainer component={Paper}>
@@ -60,31 +90,23 @@ const LocationInformationCard = () => {
                   <b>Địa điểm</b>
                 </TableCell>
                 <TableCell className="table-content">
-                  <p>Chùa Linh Ứng</p>
+                  <p>{place.name}</p>
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell align="left" className="table-header">
-                  <b>Thành phố</b>
-                </TableCell>
-                <TableCell className="table-content">
-                  <p>Đà Nẵng</p>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="left" className="table-header">
-                  <b>Mô tả</b>
-                </TableCell>
-                <TableCell className="table-content">
-                  <p style={{ textOverflow: "ellipsis" }}>
-                    Chùa Linh Ứng là một ngôi chùa nằm trên dãy núi Sơn Trà,
-                    thuộc địa bàn xã Hòa Hải, huyện Ngũ Hành Sơn, thành phố Đà
-                    Nẵng. Ngôi chùa này được xây dựng từ thế kỷ XVIII và được
-                    coi là một trong những ngôi chùa lớn và đẹp nhất tại Đà
-                    Nẵng.
-                  </p>
-                </TableCell>
-              </TableRow>
+              {place.information?.map((infor) => {
+                return (
+                  <TableRow>
+                    <TableCell align="left" className="table-header">
+                      <b>{infor.title}</b>
+                    </TableCell>
+                    <TableCell className="table-content">
+                      <p style={{ textOverflow: "ellipsis" }}>
+                        {infor.description}
+                      </p>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>

@@ -1,4 +1,5 @@
 import BananaMarker from "../assets/icons/banana-marker.gif";
+import pano from "../assets/images/background.jpg";
 export const constants = {
   REACT_APP_MAP_ACCESS_TOKEN: process.env.REACT_APP_MAP_ACCESS_TOKEN,
   REACT_APP_BASE_URL_FAKE_360_IMAGE:
@@ -17,9 +18,7 @@ export const constants = {
   virtualTourNodes: [
     {
       id: "1",
-      panorama:
-        "https://photo-sphere-viewer-data.netlify.app/assets/" +
-        "tour/key-biscayne-1.jpg",
+      panorama: pano,
       thumbnail:
         "https://photo-sphere-viewer-data.netlify.app/assets/" +
         "tour/key-biscayne-1-thumb.jpg",
@@ -36,7 +35,7 @@ export const constants = {
         },
       ],
       gps: [-80.156479, 25.666725, 3],
-      panoData: { poseHeading: 327 },
+      // panoData: { poseHeading: 327 },
     },
     {
       id: "2",
