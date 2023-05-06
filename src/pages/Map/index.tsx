@@ -12,21 +12,26 @@ import ScreenPicker from "./components/ScreenPicker";
 import Zoom from "./components/Zoom";
 import "./index.scss";
 import { constants } from "../../constants";
-import { useGetAllPlacesQuery } from "../../services/placeApi";
-import { useSelector } from "react-redux";
+import {
+  useLazyGetAllCategoriesQuery,
+  useLazyGetCategoryQuery,
+} from "../../services/categoryApi";
+import { ICategory, IPlace } from "../../types/place";
 
 export const MapContext = createContext(null);
 const Map = () => {
-  const { data } = useGetAllPlacesQuery();
-  console.log(data);
-  const reduxData = useSelector((state) => state);
-  console.log(reduxData)
+  const [categoryState, setCategoryState] = useState<string>("");
+  const [getCategory, { data: category }] = useLazyGetCategoryQuery();
+  const [places, setPlaces] = useState<any>([]);
+  const [getCategorieList, { data: categoryList }] =
+    useLazyGetAllCategoriesQuery();
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [mapContextValue, setMapContextValue] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isShowMode, setIsShowMode] = useState(false);
   const [mapStyle, setMapStyle] = useState("REACT_APP_MAP_STYLE_STREETS");
+
   useEffect(() => {
     if (map.current) {
       setMapContextValue(map.current);
@@ -47,74 +52,47 @@ const Map = () => {
 
     (map.current as any).on("load", () => {
       // Thêm icon từ svg vào bản đồ, ngoài ra cũng có thể thêm từ png, jpeg
-      const mapMarkerBlue = new Image(40, 40);
-      mapMarkerBlue.onload = () =>
-        (map.current as any).addImage("map-marker-blue", mapMarkerBlue);
-      mapMarkerBlue.src = mapMarkerBlueSvg;
-
+      // const mapMarkerBlue = new Image(40, 40);
+      // mapMarkerBlue.onload = () =>
+      //   (map.current as any).addImage("map-marker-blue", mapMarkerBlue);
+      // mapMarkerBlue.src = mapMarkerBlueSvg;
+      // categories?.forEach((element: ICategory) => {
+      //   let maker = new Image(40, 40);
+      //   mapMarkerBlue.onload = () =>
+      //     (map.current as any).addImage(element.id, maker);
+      //   element.svg ? (maker.src = element.svg) : (maker.src = "");
+      // });
       // Thêm source tọa độ
-      (map.current as any).addSource("markers", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {
-                "marker-type": "blue",
-                icon: "map-marker-blue",
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [105.84228515625, 21.022982546427425],
-              },
-            },
-          ],
-        },
-      });
-      (map.current as any).addSource("markerss", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {
-                "marker-type": "blue",
-                icon: "map-marker-blue",
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [120.84228515625, 21.022982546427425],
-              },
-            },
-          ],
-        },
-      });
-
-      (map.current as any).addLayer({
-        id: "markers",
-        type: "symbol",
-        source: "markers",
-        layout: {
-          // 'icon-image': ['match', ['get', 'marker-type'], 'red', 'map-marker-red', 'map-marker-blue'],
-          "icon-image": "{icon}",
-          "icon-allow-overlap": true,
-          "icon-size": 1,
-        },
-      });
-      (map.current as any).addLayer({
-        id: "markerss",
-        type: "symbol",
-        source: "markerss",
-        layout: {
-          // 'icon-image': ['match', ['get', 'marker-type'], 'red', 'map-marker-red', 'map-marker-blue'],
-          "icon-image": "{icon}",
-          "icon-allow-overlap": true,
-          "icon-size": 1,
-        },
-      });
-
+      // (map.current as any).addSource("markers", {
+      //   type: "geojson",
+      //   data: {
+      //     type: "FeatureCollection",
+      //     features: [
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           "marker-type": "blue",
+      //           icon: "map-marker-blue",
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [105.84228515625, 21.022982546427425],
+      //         },
+      //       },
+      //     ],
+      //   },
+      // });
+      // (map.current as any).addLayer({
+      //   id: "markers",
+      //   type: "symbol",
+      //   source: "markers",
+      //   layout: {
+      //     // 'icon-image': ['match', ['get', 'marker-type'], 'red', 'map-marker-red', 'map-marker-blue'],
+      //     "icon-image": "{icon}",
+      //     "icon-allow-overlap": true,
+      //     "icon-size": 1,
+      //   },
+      // });
       // (map.current as any).addSource("earthquakes", {
       //   type: "geojson",
       //   // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
@@ -327,62 +305,60 @@ const Map = () => {
       //   },
       // });
       // inspect a cluster on click
-      (map.current as any).on("click", "clusters", (e: any) => {
-        const features = (map.current as any).queryRenderedFeatures(e.point, {
-          layers: ["clusters"],
-        });
-        const clusterId = features[0].properties.cluster_id;
-        (map.current as any)
-          .getSource("earthquakes")
-          .getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-            if (err) return;
-
-            (map.current as any).easeTo({
-              center: features[0].geometry.coordinates,
-              zoom: zoom,
-            });
-          });
-      });
-
+      // (map.current as any).on("click", "clusters", (e: any) => {
+      //   const features = (map.current as any).queryRenderedFeatures(e.point, {
+      //     layers: ["clusters"],
+      //   });
+      //   const clusterId = features[0].properties.cluster_id;
+      //   (map.current as any)
+      //     .getSource("earthquakes")
+      //     .getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
+      //       if (err) return;
+      //       (map.current as any).easeTo({
+      //         center: features[0].geometry.coordinates,
+      //         zoom: zoom,
+      //       });
+      //     });
+      // });
       // When a click event occurs on a feature in
       // the unclustered-point layer, open a popup at
       // the location of the feature, with
       // description HTML from its properties.
-      (map.current as any).on("click", "unclustered-point", (e: any) => {
-        const coordinates = e.features[0].geometry.coordinates.slice();
-        const mag = e.features[0].properties.mag;
-        const tsunami = e.features[0].properties.tsunami === 1 ? "yes" : "no";
-
-        // Ensure that if the map is zoomed out such that
-        // multiple copies of the feature are visible, the
-        // popup appears over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
-
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          .setHTML(`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`)
-          .addTo(map);
-      });
-
-      (map.current as any).on("mouseenter", "clusters", () => {
-        (map.current as any).getCanvas().style.cursor = "pointer";
-      });
-      (map.current as any).on("mouseleave", "clusters", () => {
-        (map.current as any).getCanvas().style.cursor = "";
-      });
+      // (map.current as any).on("click", "unclustered-point", (e: any) => {
+      //   const coordinates = e.features[0].geometry.coordinates.slice();
+      //   const mag = e.features[0].properties.mag;
+      //   const tsunami = e.features[0].properties.tsunami === 1 ? "yes" : "no";
+      //   // Ensure that if the map is zoomed out such that
+      //   // multiple copies of the feature are visible, the
+      //   // popup appears over the copy being pointed to.
+      //   while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      //   }
+      //   new mapboxgl.Popup()
+      //     .setLngLat(coordinates)
+      //     .setHTML(`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`)
+      //     .addTo(map);
+      // });
+      // (map.current as any).on("mouseenter", "clusters", () => {
+      //   (map.current as any).getCanvas().style.cursor = "pointer";
+      // });
+      // (map.current as any).on("mouseleave", "clusters", () => {
+      //   (map.current as any).getCanvas().style.cursor = "";
+      // });
     });
 
-    (map.current as any).on("mouseenter", "markers", () => {
-      (map.current as any).getCanvas().style.cursor = "pointer";
-    });
+    // (map.current as any).on("mouseenter", "markers", () => {
+    //   (map.current as any).getCanvas().style.cursor = "pointer";
+    // });
 
-    (map.current as any).on("mouseleave", "markers", () => {
-      (map.current as any).getCanvas().style.cursor = "";
-    });
-    (map.current as any).on("zoom", () => {});
-  }, []);
+    // (map.current as any).on("mouseleave", "markers", () => {
+    //   (map.current as any).getCanvas().style.cursor = "";
+    // });
+    // (map.current as any).on("zoom", () => {
+    //   console.log("a");
+    // });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  });
 
   useEffect(() => {
     const showSummaryPopup = (lngLat: any) => {
@@ -398,9 +374,7 @@ const Map = () => {
       const coordinates = e.features[0].geometry.coordinates.slice();
       showSummaryPopup(coordinates);
       const root = document.getElementsByClassName("info-popup-container")[0];
-      ReactDOM.createRoot(root).render(
-        <LocationInformationCard/>
-      );
+      ReactDOM.createRoot(root).render(<LocationInformationCard />);
     };
 
     (map.current as any).on("click", "markers", onMarkerClick);
@@ -450,6 +424,52 @@ const Map = () => {
       handleModeChange(false);
     }
   };
+  const handleCategoryChange = (slug: string) => {
+    getCategory(slug);
+    setCategoryState(slug);
+  };
+
+  useEffect(() => {
+    setPlaces(category?.places);
+    console.log(category?.places);
+  }, [category]);
+
+  useEffect(() => {
+    console.log(places);
+    let title = "Tuan" + Math.random();
+    (map.current as any).on("idle", async () => {
+      console.log(categoryState);
+      console.log(places, title);
+      places.forEach((place: any) => {
+        console.log("xin chao");
+        (map.current as any).addSource(place.id, {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [place.lng, place.lat],
+                },
+              },
+            ],
+          },
+        });
+        (map.current as any).addLayer({
+          id: place.id,
+          type: "circle",
+          source: place.id,
+          paint: {
+            "circle-radius": 10,
+            "circle-color": "#007cbf",
+          },
+        });
+      });
+    });
+    // (map.current as any).off('load')
+  }, [places]);
   return (
     <MapContext.Provider value={mapContextValue}>
       <Box component="div" ref={mapContainer} className="map-container" />
@@ -477,7 +497,7 @@ const Map = () => {
             </Grid>
           )}
           <Grid item xs={6} sm={5} md={4} lg={3} xl={3}>
-            <FieldPicker />
+            <FieldPicker onCategoryChange={handleCategoryChange} />
           </Grid>
         </Grid>
       </Box>

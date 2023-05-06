@@ -33,7 +33,7 @@ export const HomeStyled = styled.div`
     .char-item {
       transition: 0.3 !important;
       text-shadow: 0 0 0 #fff;
-      margin:0px 5px;
+      margin:0px 15px;
 
       :hover {
         text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
@@ -78,9 +78,9 @@ export const HomeStyled = styled.div`
         transition: all 0.2s ease-in-out;
       }
       :hover {
-        background-color: var(--main-bg-color);
-        color: var(--main-content-texet-color);
-        box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #5271ff,
+        background-color: var(--btn-explore);
+        color: var(--main-content-text-color);
+        box-shadow: 0 0 7px var(--btn-explore), 0 0 10px var(--btn-explore), 0 0 21px var(--btn-explore), 0 0 42px #5271ff,
           0 0 82px #5271ff, 0 0 92px #5271ff, 0 0 102px #5271ff,
           0 0 151px #5271ff;
 

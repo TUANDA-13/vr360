@@ -1,6 +1,6 @@
 export interface IPlace {
   id: string;
-  category: ICategory;
+  category?: ICategory;
   information: IInformation[];
   created_at: string;
   updated_at: string;
@@ -16,6 +16,9 @@ export interface ICategory {
   id: string;
   title: string;
   description?: string;
+  svg?: string;
+  slug?: string;
+  places?: IPlace[];
 }
 
 export interface IInformation {

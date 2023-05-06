@@ -3,16 +3,20 @@ import {
   FormLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
 } from "@mui/material";
-import { useState } from "react";
-import { constants } from "../../../../constants";
-const FieldPicker = () => {
-  const [field, setField] = useState("1");
-  const handleSelectChange = (e: SelectChangeEvent) => {
-    setField(e.target.value as string);
-  };
-  const fields = constants.fields;
+import { useState, useEffect } from "react";
+import { useGetAllCategoriesQuery } from "../../../../services/categoryApi";
+import { CategoryStyleInterface } from "../../../../types/map";
+const FieldPicker = ({onCategoryChange}: CategoryStyleInterface) => {
+  const [field, setField] = useState("");
+  const { data: categories } = useGetAllCategoriesQuery();
+  useEffect(()=>{
+    categories?.forEach(category => {
+      if(category.slug === "chua-linh-ung"){
+        setField(category.slug)
+      }
+    });
+  },[categories])
   return (
     <FormControl fullWidth>
       <FormLabel
@@ -47,7 +51,10 @@ const FieldPicker = () => {
         }}
         labelId="field-picker-label"
         value={field}
-        onChange={handleSelectChange}
+        onChange={(event)=>{
+          setField(event?.target?.value);
+          console.log(event?.target?.value)
+          onCategoryChange(event?.target?.value)}}
         inputProps={{
           sx: {
             fontSize: "16px",
@@ -58,7 +65,7 @@ const FieldPicker = () => {
           },
         }}
       >
-        {fields.map((field, i) => {
+        {categories?.map((field) => {
           return (
             <MenuItem
               sx={{
@@ -68,10 +75,10 @@ const FieldPicker = () => {
                   fontFamily: "inherit",
                 },
               }}
-              value={field.value}
-              key={i}
+              value={field.slug}
+              key={field.id}
             >
-              {field.field}
+              {field.title}
             </MenuItem>
           );
         })}

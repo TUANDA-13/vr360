@@ -6,9 +6,8 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { constants } from "../../../../constants";
-interface MapStylePickerInterface {
-  onStyleChange: any;
-}
+import { MapStylePickerInterface } from "../../../../types/map";
+
 const MapStylePicker = ({ onStyleChange }: MapStylePickerInterface) => {
   return (
     <FormControl>
