@@ -1,18 +1,25 @@
-import {
-  FormControl,
-  FormLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
-import { useState } from "react";
-import { constants } from "../../../../constants";
-const FieldPicker = () => {
-  const [field, setField] = useState("1");
-  const handleSelectChange = (e: SelectChangeEvent) => {
-    setField(e.target.value as string);
-  };
-  const fields = constants.fields;
+import { FormControl, FormLabel, MenuItem, Select } from "@mui/material";
+import { ICategory } from "../../../../types/place";
+import { useEffect } from "react";
+export interface CategoryStyleInterface {
+  onCategoryChange: any;
+  categories: ICategory[] | undefined;
+  categorySlug: string;
+}
+const FieldPicker = ({
+  onCategoryChange,
+  categories,
+  categorySlug,
+}: CategoryStyleInterface) => {
+  useEffect(() => {
+    console.log("hi")
+    categories?.forEach((item: ICategory) => {
+      if (item.slug === "chua-linh-ung") {
+        onCategoryChange(item.slug);
+        return;
+      }
+    });
+  }, [categories]);
   return (
     <FormControl fullWidth>
       <FormLabel
@@ -46,8 +53,11 @@ const FieldPicker = () => {
           mt: "4px",
         }}
         labelId="field-picker-label"
-        value={field}
-        onChange={handleSelectChange}
+        value={categorySlug}
+        onChange={(event) => {
+          console.log(event?.target?.value);
+          onCategoryChange(event?.target?.value);
+        }}
         inputProps={{
           sx: {
             fontSize: "16px",
@@ -58,7 +68,7 @@ const FieldPicker = () => {
           },
         }}
       >
-        {fields.map((field, i) => {
+        {categories?.map((field: ICategory) => {
           return (
             <MenuItem
               sx={{
@@ -68,10 +78,10 @@ const FieldPicker = () => {
                   fontFamily: "inherit",
                 },
               }}
-              value={field.value}
-              key={i}
+              value={field.slug}
+              key={field.id}
             >
-              {field.field}
+              {field.title}
             </MenuItem>
           );
         })}

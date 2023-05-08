@@ -4,15 +4,15 @@ import { baseNoAuthQuery } from "./baseQuery";
 import { IPlace } from "../types/place";
 
 export const placeAPI = createApi({
-  reducerPath: "place",
+  reducerPath: "places",
   baseQuery: baseNoAuthQuery,
-  tagTypes: ["Place"],
+  tagTypes: ["Places"],
   endpoints: (builder) => ({
     getAllPlaces: builder.query<IPlace[], void>({
       query: () => ({
-        url: "place/",
+        url: "places/",
       }),
-      providesTags: ["Place"],
+      providesTags: ["Places"],
     }),
     // createUpdatePrize: builder.mutation({
     //   query: (body: IPrize) => ({
