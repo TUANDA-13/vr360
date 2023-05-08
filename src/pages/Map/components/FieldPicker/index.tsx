@@ -1,22 +1,25 @@
-import {
-  FormControl,
-  FormLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
-import { useState, useEffect } from "react";
-import { useGetAllCategoriesQuery } from "../../../../services/categoryApi";
-import { CategoryStyleInterface } from "../../../../types/map";
-const FieldPicker = ({onCategoryChange}: CategoryStyleInterface) => {
-  const [field, setField] = useState("");
-  const { data: categories } = useGetAllCategoriesQuery();
-  useEffect(()=>{
-    categories?.forEach(category => {
-      if(category.slug === "chua-linh-ung"){
-        setField(category.slug)
+import { FormControl, FormLabel, MenuItem, Select } from "@mui/material";
+import { ICategory } from "../../../../types/place";
+import { useEffect } from "react";
+export interface CategoryStyleInterface {
+  onCategoryChange: any;
+  categories: ICategory[] | undefined;
+  categorySlug: string;
+}
+const FieldPicker = ({
+  onCategoryChange,
+  categories,
+  categorySlug,
+}: CategoryStyleInterface) => {
+  useEffect(() => {
+    console.log("hi")
+    categories?.forEach((item: ICategory) => {
+      if (item.slug === "chua-linh-ung") {
+        onCategoryChange(item.slug);
+        return;
       }
     });
-  },[categories])
+  }, [categories]);
   return (
     <FormControl fullWidth>
       <FormLabel
@@ -50,11 +53,11 @@ const FieldPicker = ({onCategoryChange}: CategoryStyleInterface) => {
           mt: "4px",
         }}
         labelId="field-picker-label"
-        value={field}
-        onChange={(event)=>{
-          setField(event?.target?.value);
-          console.log(event?.target?.value)
-          onCategoryChange(event?.target?.value)}}
+        value={categorySlug}
+        onChange={(event) => {
+          console.log(event?.target?.value);
+          onCategoryChange(event?.target?.value);
+        }}
         inputProps={{
           sx: {
             fontSize: "16px",
@@ -65,7 +68,7 @@ const FieldPicker = ({onCategoryChange}: CategoryStyleInterface) => {
           },
         }}
       >
-        {categories?.map((field) => {
+        {categories?.map((field: ICategory) => {
           return (
             <MenuItem
               sx={{
