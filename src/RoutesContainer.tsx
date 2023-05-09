@@ -4,7 +4,7 @@ import { RouteConfig } from "./router/types";
 
 const RenderRoutes = () => {
   return routesConfig.map((r: RouteConfig, index) => {
-    return <Route key={index} path={r.path} element={<r.component />} />;
+    return <Route key={index+'255'} path={r.path} element={<r.component />} />;
   });
 };
 
