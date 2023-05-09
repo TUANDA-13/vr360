@@ -14,7 +14,6 @@ import "./index.scss";
 import { constants } from "../../constants";
 import { useLazyGetCategoryQuery } from "../../services/categoryApi";
 import { ICategory, IPlace } from "../../types/place";
-import { useLazyGetAllCategoriesQuery } from "../../services/categoryApi";
 import { useGetAllCategoriesQuery } from "../../services/categoryApi";
 
 export const MapContext = createContext(null);
@@ -46,7 +45,6 @@ const Map = () => {
       }
     });
   }, [categories]);
-
   useEffect(() => {
     if (map.current) {
       setMapContextValue(map.current);
@@ -129,7 +127,6 @@ const Map = () => {
         },
       });
 
-      console.log(categories);
       (map.current as any).addSource("place", {
         type: "geojson",
         data: {
@@ -259,7 +256,9 @@ const Map = () => {
       const popupContent = document.createElement("div");
       popupContent.className = "info-popup-container";
       popup.setLngLat(e?.lngLat).setDOMContent(popupContent).addTo(map.current);
-      ReactDOM.createRoot(popupContent).render(<LocationInformationCard place_info={place_info}/>);
+      ReactDOM.createRoot(popupContent).render(
+        <LocationInformationCard place_info={place_info} />
+      );
     };
 
     (map.current as any).on("click", "unclustered-point", (e: any) => {

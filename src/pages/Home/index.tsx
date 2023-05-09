@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import background from "../../assets/images/background.jpg";
 import { HomeStyled } from "./styled";
 import EastIcon from "@mui/icons-material/East";
+import RouterPath from "../../router/RouterPath";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const Home = () => {
           <div
             className="btn-explore"
             onClick={() => {
-              navigate("/map");
+              navigate(RouterPath.MAP);
             }}
           >
             <span></span>

@@ -4,7 +4,6 @@ export type RouterType = {
 };
 export type RouteConfig = {
   path?: string;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   component:
     | ((props: any) => JSX.Element)
     | React.LazyExoticComponent<(props: any) => JSX.Element>;

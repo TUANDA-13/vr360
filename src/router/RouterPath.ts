@@ -1,6 +1,7 @@
 enum RouterPath {
+  HOME = "/",
   VIRTUAL_TOURISM_3D = "/virtual-tourism-3d",
   MAP = "/map",
-  HOME = "/",
+  NOTFOUND="*"
 }
 export default RouterPath;
