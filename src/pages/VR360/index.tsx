@@ -27,35 +27,44 @@ const VR360 = () => {
   const loadVirtualTourPlugin = (instance: any) => {
     const virtualTourPlugin = instance.getPlugin(VirtualTourPlugin);
     if (!virtualTourPlugin) return;
-    virtualTourPlugin.setNodes(constants.virtualTourNodes, "1");
+    virtualTourPlugin.setNodes(
+      constants.nodes,
+      "f4b38dcf-d435-4ea1-acfa-a6a1b38591db"
+    );
     const galleryPlugin = instance.getPlugin(GalleryPlugin);
     galleryPlugin.setItems([
       {
-        id: "sphere",
-        panorama: baseUrl + "sphere.jpg",
-        thumbnail: baseUrl + "sphere-small.jpg",
-        name: "HCM city",
-        options: {
-          caption: "Parc national du Mercantour <b>&copy; Damien Sorel</b>",
-        },
+        id: "c4b32625-597d-40e0-b3b6-5003621f213f",
+        name: "Sân chùa",
+        description: "<p>S&acirc;n ch&ugrave;a</p>",
+        panorama:
+          "http://localhost:8000/media/nodes/san-chua/f52ff488-f07c-11ed-9c34-94e6f7246854.jpg",
+        thumbnail:
+          "http://localhost:8000/media/nodes/san-chua/f57c4cb4-f07c-11ed-bdb7-94e6f7246854.jpg",
+        gps: [16.099560829356484, 108.27752394820617, 2.0],
+        place: "60786bf8-62f2-457b-8100-60360069b787",
       },
       {
-        id: "sphere-test",
-        panorama: baseUrl + "sphere-test.jpg",
-        thumbnail: DaNangCity,
-        name: "Da Nang City",
-        options: {
-          caption: "Da Nang has many spectacular views and beautiful sites ",
-        },
+        id: "f451a15a-d01c-4a7d-b18d-631137aff8a6",
+        name: "Cổng chùa",
+        description: "<p>Đ&acirc;y l&agrave; cổng ch&ugrave;a</p>",
+        panorama:
+          "http://localhost:8000/media/nodes/cong-chua/5d7ee823-f07b-11ed-9b28-94e6f7246854.png",
+        thumbnail:
+          "http://localhost:8000/media/nodes/cong-chua/efce534a-f07a-11ed-bdf7-94e6f7246854.jpg",
+        gps: [16.099560829356484, 108.27752394820617, 3.0],
+        place: "60786bf8-62f2-457b-8100-60360069b787",
       },
       {
-        id: "key-biscayne",
-        panorama: baseUrl + "tour/key-biscayne-1.jpg",
-        thumbnail: baseUrl + "tour/key-biscayne-1-thumb.jpg",
-        name: "Key Biscayne",
-        options: {
-          caption: "Cape Florida Light, Key Biscayne <b>&copy; Pixexid</b>",
-        },
+        id: "f4b38dcf-d435-4ea1-acfa-a6a1b38591db",
+        name: "Các vị La Hán",
+        description: "<p>C&aacute;c vị La H&aacute;n</p>",
+        panorama:
+          "http://localhost:8000/media/nodes/cac-vi-la-han/3c82632b-f07d-11ed-bb78-94e6f7246854.jpg",
+        thumbnail:
+          "http://localhost:8000/media/nodes/cac-vi-la-han/54eac4d1-f07d-11ed-8348-94e6f7246854.jpg",
+        gps: [16.09995775237078, 108.27751994041334, 2.0],
+        place: "60786bf8-62f2-457b-8100-60360069b787",
       },
     ]);
     const markersPlugin = instance.getPlugin(MarkersPlugin);
