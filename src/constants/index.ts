@@ -140,6 +140,62 @@ export const constants = {
       panoData: { poseHeading: 250 },
     },
   ],
+  nodes: [
+    {
+      id: "c4b32625-597d-40e0-b3b6-5003621f213f",
+      name: "Sân chùa",
+      description: "<p>S&acirc;n ch&ugrave;a</p>",
+      panorama:
+        "http://localhost:8000/media/nodes/san-chua/914cbbd0-f17f-11ed-9b1b-94e6f7246854.jpg",
+      thumbnail:
+        "http://localhost:8000/media/nodes/san-chua/f57c4cb4-f07c-11ed-bdb7-94e6f7246854.jpg",
+      gps: [16.099678820098635, 108.27759004959536, 2.0],
+      place: "60786bf8-62f2-457b-8100-60360069b787",
+      links: [
+        {
+          nodeId: "f451a15a-d01c-4a7d-b18d-631137aff8a6",
+        },
+        {
+          nodeId: "f4b38dcf-d435-4ea1-acfa-a6a1b38591db",
+        },
+      ],
+      panoData: { poseHeading: 320 },
+    },
+    {
+      id: "f451a15a-d01c-4a7d-b18d-631137aff8a6",
+      name: "Cổng chùa",
+      description: "<p>Đ&acirc;y l&agrave; cổng ch&ugrave;a</p>",
+      panorama:
+        "http://localhost:8000/media/nodes/cong-chua/5d7ee823-f07b-11ed-9b28-94e6f7246854.png",
+      thumbnail:
+        "http://localhost:8000/media/nodes/cong-chua/efce534a-f07a-11ed-bdf7-94e6f7246854.jpg",
+      gps: [16.09949520771872, 108.27750153669905, 2.0],
+      place: "60786bf8-62f2-457b-8100-60360069b787",
+      links: [
+        {
+          nodeId: "c4b32625-597d-40e0-b3b6-5003621f213f",
+        },
+      ],
+      panoData: { poseHeading: 320 },
+    },
+    {
+      id: "f4b38dcf-d435-4ea1-acfa-a6a1b38591db",
+      name: "Các vị La Hán",
+      description: "<p>C&aacute;c vị La H&aacute;n</p>",
+      panorama:
+        "http://localhost:8000/media/nodes/cac-vi-la-han/3c82632b-f07d-11ed-bb78-94e6f7246854.jpg",
+      thumbnail:
+        "http://localhost:8000/media/nodes/cac-vi-la-han/54eac4d1-f07d-11ed-8348-94e6f7246854.jpg",
+      gps: [16.100004812188818, 108.27755249867302, 2.0],
+      place: "60786bf8-62f2-457b-8100-60360069b787",
+      links: [
+        {
+          nodeId: "c4b32625-597d-40e0-b3b6-5003621f213f",
+        },
+      ],
+      panoData: { poseHeading: 30 },
+    },
+  ],
   fields: [
     {
       field: "Du Lịch",
