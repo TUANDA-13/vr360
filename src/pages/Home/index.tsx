@@ -4,11 +4,12 @@ import { useMemo } from "react";
 import background from "../../assets/images/background.jpg";
 import { HomeStyled } from "./styled";
 import EastIcon from "@mui/icons-material/East";
+import RouterPath from "../../router/RouterPath";
 
 const Home = () => {
   const navigate = useNavigate();
   const renderTitle = useMemo(() => {
-    return "CHÙA LINH ỨNG".split("").map((item) => {
+    return "CHÙA LINH ỨNG".split(" ").map((item) => {
       return <span className="char-item">{item}</span>;
     });
   }, []);
@@ -53,7 +54,7 @@ const Home = () => {
           <div
             className="btn-explore"
             onClick={() => {
-              navigate("/map");
+              navigate(RouterPath.MAP);
             }}
           >
             <span></span>
@@ -66,61 +67,6 @@ const Home = () => {
         </Box>
       </Box>
     </HomeStyled>
-
-    //  <Box flex={1} display="flex" alignItems="center" justifyContent="center">
-    //   <div>
-    //     <Typography variant="h2">Chùa Linh Ứng</Typography>
-
-    //     <Typography variant="h5">
-    //       Đã từ lâu, chùa Linh Ứng Đà Nẵng là điểm đến nổi tiếng với vẻ đẹp
-    //       tâm linh giữa cảnh sắc thiên nhiên hữu tình, hùng vĩ. Với vị trí địa
-    //       lý thuận lợi, tọa lạc trên một núi lớn, Chùa Linh Ứng là nơi thu hút
-    //       rất nhiều khách du lịch khi đến tham quan Đà Nẵng. Cùng khám phá chi
-    //       tiết về “tam giác tâm linh” này ngay sau đây nhé!
-    //     </Typography>
-    //   </div>
-    // </Box>
-    //  <Box flex={1} display="flex" alignItems="center" justifyContent="center">
-    //   <div>
-    //     <Typography variant="h2">Chùa Linh Ứng</Typography>
-
-    //     <Typography variant="h5">
-    //       Đã từ lâu, chùa Linh Ứng Đà Nẵng là điểm đến nổi tiếng với vẻ đẹp
-    //       tâm linh giữa cảnh sắc thiên nhiên hữu tình, hùng vĩ. Với vị trí địa
-    //       lý thuận lợi, tọa lạc trên một núi lớn, Chùa Linh Ứng là nơi thu hút
-    //       rất nhiều khách du lịch khi đến tham quan Đà Nẵng. Cùng khám phá chi
-    //       tiết về “tam giác tâm linh” này ngay sau đây nhé!
-    //     </Typography>
-    //   </div>
-    // </Box>
-    // <Box>
-    //   <Button
-    //     onClick={() => {
-    //       setDestination("/map");
-    //       setIsShowDialogConfirm(true);
-    //     }}
-    //   >
-    //     Map
-    //   </Button>
-    //   <Button
-    //     onClick={() => {
-    //       setDestination("/virtual-tourism-3d");
-    //       setIsShowDialogConfirm(true);
-    //     }}
-    //   >
-    //     Virtual Tourism 3D
-    //   </Button>
-    //   {isShowDialogConfirm && (
-    //     <DialogInformation
-    //       title="Confirm"
-    //       content="Are you sure you want to navigate to there?"
-    //       onCancel={() => setIsShowDialogConfirm(false)}
-    //       onConfirm={() => {
-    //         navigate(destination);
-    //       }}
-    //     />
-    //   )}
-    // </Box>
   );
 };
 export default Home;

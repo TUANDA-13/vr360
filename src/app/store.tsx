@@ -1,16 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { placeAPI } from "../services/placeApi";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-// import counterSlice from '../features/counter/counterSlice';
-// ...
+import { categoryAPI } from "../services/categoryApi";
 
 export const store = configureStore({
   reducer: {
-    // place: place,
     [placeAPI.reducerPath]: placeAPI.reducer,
+    [categoryAPI.reducerPath]: categoryAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(placeAPI.middleware)
+    getDefaultMiddleware().concat(placeAPI.middleware).concat(categoryAPI.middleware)
 });
 
 setupListeners(store.dispatch)
