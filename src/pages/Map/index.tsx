@@ -262,7 +262,7 @@ const Map = () => {
     };
 
     (map.current as any).on("click", "unclustered-point", (e: any) => {
-      onMarkerClick(e, e.features[0].properties as IPlace);
+      // onMarkerClick(e, e.features[0].properties as IPlace);
     });
 
     return () => {

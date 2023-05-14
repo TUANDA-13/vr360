@@ -7,7 +7,6 @@ import {
   VirtualTourPlugin,
 } from "react-photo-sphere-viewer";
 import Loading from "../../assets/icons/loading.gif";
-import DaNangCity from "../../assets/images/background.jpg";
 import { constants } from "../../constants";
 const VR360 = () => {
   const baseUrl = constants.REACT_APP_BASE_URL_FAKE_360_IMAGE;
