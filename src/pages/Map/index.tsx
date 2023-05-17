@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Button } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
 import mapMarkerBlueSvg from "../../assets/icons/map-marker-blue.svg";
@@ -15,7 +15,7 @@ import { constants } from "../../constants";
 import { useLazyGetCategoryQuery } from "../../services/categoryApi";
 import { ICategory, IPlace } from "../../types/place";
 import { useGetAllCategoriesQuery } from "../../services/categoryApi";
-
+import { ReactComponent as SettingIcon } from "../../assets/icons/icons8-settings.svg";
 export const MapContext = createContext(null);
 const Map = () => {
   const [categoryState, setCategoryState] = useState<string>("");
@@ -28,7 +28,7 @@ const Map = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isShowMode, setIsShowMode] = useState(false);
   const [mapStyle, setMapStyle] = useState("REACT_APP_MAP_STYLE_STREETS");
-
+  const [showSetting, setShowSetting] = useState(false);
   useEffect(() => {
     setCategoryState("chua-linh-ung");
   }, []);
@@ -39,7 +39,7 @@ const Map = () => {
         (map.current as any).loadImage(item.svg, (error: any, image: any) => {
           if (error) throw error;
           console.log(item.svg);
-          // Add the image to the map style.
+
           (map.current as any).addImage(item.id, image);
         });
       }
@@ -48,13 +48,13 @@ const Map = () => {
   useEffect(() => {
     if (map.current) {
       setMapContextValue(map.current);
-      return; // initialize map only once
+      return;
     }
 
     if (categories) {
       categories.forEach((item: ICategory) => {});
     }
-    // Khởi tạo bản đồ
+
     map.current = loadMap(
       mapContainer.current,
       isShowMode
@@ -68,64 +68,43 @@ const Map = () => {
     }
     (map.current as any).on("load", () => {
       getCategory("Chua-linh-ung");
-      // Thêm icon từ svg vào bản đồ, ngoài ra cũng có thể thêm từ png, jpeg
+
       const mapMarkerBlue = new Image(40, 40);
       mapMarkerBlue.onload = () =>
         (map.current as any).addImage("map-marker-blue", mapMarkerBlue);
       mapMarkerBlue.src = mapMarkerBlueSvg;
-      // categories?.forEach((element: ICategory) => {
-      //   if (element.svg) {
-      //     let maker = new Image(40, 40);
-      //     mapMarkerBlue.onload = () =>
-      //       (map.current as any).addImage(element.id, maker);
-      //     maker.src = element.svg;
 
-      //     (map.current as any).addLayer({
-      //       id: element.id,
-      //       type: "symbol",
-      //       source: element.id,
-      //       layout: {
-      //         // 'icon-image': ['match', ['get', 'marker-type'], 'red', 'map-marker-red', 'map-marker-blue'],
-      //         "icon-image": "{icon}",
-      //         "icon-allow-overlap": true,
-      //         "icon-size": 1,
+      // (map.current as any).addSource("markers", {
+      //   type: "geojson",
+      //   data: {
+      //     type: "FeatureCollection",
+      //     features: [
+      //       {
+      //         type: "Feature",
+      //         properties: {
+      //           "marker-type": "blue",
+      //           icon: "map-marker-blue",
+      //         },
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: [105.84228515625, 21.022982546427425],
+      //         },
       //       },
-      //     });
-      //   }
+      //     ],
+      //   },
       // });
-      // Thêm source tọa độ
 
-      (map.current as any).addSource("markers", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {
-                "marker-type": "blue",
-                icon: category?.id,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [105.84228515625, 21.022982546427425],
-              },
-            },
-          ],
-        },
-      });
-
-      (map.current as any).addLayer({
-        id: "markers",
-        type: "symbol",
-        source: "markers",
-        layout: {
-          // 'icon-image': ['match', ['get', 'marker-type'], 'red', 'map-marker-red', 'map-marker-blue'],
-          "icon-image": "{icon}",
-          "icon-allow-overlap": true,
-          "icon-size": 1,
-        },
-      });
+      // (map.current as any).addLayer({
+      //   id: "markers",
+      //   type: "symbol",
+      //   source: "markers",
+      //   layout: {
+      //     // 'icon-image': ['match', ['get', 'marker-type'], 'red', 'map-marker-red', 'map-marker-blue'],
+      //     "icon-image": "{icon}",
+      //     "icon-allow-overlap": true,
+      //     "icon-size": 1,
+      //   },
+      // });
 
       (map.current as any).addSource("place", {
         type: "geojson",
@@ -139,7 +118,11 @@ const Map = () => {
             category?.places?.map((item: IPlace) => {
               return {
                 type: "Feature",
-                properties: { ...item },
+                properties: {
+                  ...item,
+                  "marker-type": "blue",
+                  icon: "map-marker-blue",
+                },
                 geometry: {
                   type: "Point",
                   coordinates: [item.lng, item.lat],
@@ -158,11 +141,6 @@ const Map = () => {
         source: "place",
         filter: ["has", "point_count"],
         paint: {
-          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-          // with three steps to implement three types of circles:
-          //   * Blue, 20px circles when point count is less than 100
-          //   * Yellow, 30px circles when point count is between 100 and 750
-          //   * Pink, 40px circles when point count is greater than or equal to 750
           "circle-color": [
             "step",
             ["get", "point_count"],
@@ -196,14 +174,12 @@ const Map = () => {
       });
       (map.current as any).addLayer({
         id: "unclustered-point",
-        type: "circle",
+        type: "symbol",
         source: "place",
-        // filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": "#11b4da",
-          "circle-radius": 8,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff",
+        layout: {
+          "icon-image": "{icon}",
+          "icon-allow-overlap": true,
+          "icon-size": 1,
         },
       });
       // inspect a cluster on click
@@ -222,10 +198,6 @@ const Map = () => {
             });
           });
       });
-      // When a click event occurs on a feature in
-      // the unclustered-point layer, open a popup at
-      // the location of the feature, with
-      // description HTML from its properties.
 
       (map.current as any).on("mouseenter", "clusters", () => {
         (map.current as any).getCanvas().style.cursor = "pointer";
@@ -331,6 +303,8 @@ const Map = () => {
           type: "Feature",
           properties: {
             ...item,
+            "marker-type": "blue",
+            icon: "map-marker-blue",
           },
           geometry: {
             type: "Point",
@@ -347,37 +321,70 @@ const Map = () => {
   return (
     <MapContext.Provider value={mapContextValue}>
       <Box component="div" ref={mapContainer} className="map-container" />
-      <Box component="div" position="absolute" top="0" width="100%">
-        <Grid
-          container
-          style={{
-            background: "black",
-            padding: "8px",
-            opacity: "0.7",
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-          spacing={2}
-        >
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <MapStylePicker onStyleChange={handleStyleChange} />
-          </Grid>
-          {isShowMode && (
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <DarkModePicker
-                isDarkMode={isDarkMode}
-                onModeChange={handleModeChange}
+      <Box
+        component="div"
+        position="absolute"
+        top="32px"
+        width="auto"
+        right="98px"
+      >
+        {showSetting && (
+          <Grid
+            container
+            style={{
+              background: "black",
+              padding: "8px",
+              opacity: "0.7",
+              display: "flex",
+              justifyContent: "flex-start",
+            }}
+            spacing={2}
+          >
+            <Grid item>
+              <MapStylePicker onStyleChange={handleStyleChange} />
+            </Grid>
+            {isShowMode && (
+              <Grid item>
+                <DarkModePicker
+                  isDarkMode={isDarkMode}
+                  onModeChange={handleModeChange}
+                />
+              </Grid>
+            )}
+            <Grid item xs={6} sm={5} md={4} lg={3} xl={3}>
+              <FieldPicker
+                categorySlug={categoryState}
+                categories={categories}
+                onCategoryChange={handleCategoryChange}
               />
             </Grid>
-          )}
-          <Grid item xs={6} sm={5} md={4} lg={3} xl={3}>
-            <FieldPicker
-              categorySlug={categoryState}
-              categories={categories}
-              onCategoryChange={handleCategoryChange}
-            />
           </Grid>
-        </Grid>
+        )}
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: "black",
+          opacity: 0.7,
+          padding: "16px",
+          width: "auto",
+          right: "16px",
+          top: "16px",
+          position: "absolute",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          setShowSetting(!showSetting);
+        }}
+      >
+        <Box
+          sx={{
+            "&:hover": {
+              transform: "rotate(45deg)",
+            },
+          }}
+        >
+          <SettingIcon width="24px" height="24px" color="white" fill="white" />
+        </Box>
       </Box>
       <Box
         component="div"
