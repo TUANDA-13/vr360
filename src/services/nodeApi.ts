@@ -7,17 +7,13 @@ export const nodeApi = createApi({
   baseQuery: baseNoAuthQuery,
   tagTypes: ["Nodes"],
   endpoints: (builder) => ({
-    getNodeByPlaceId: builder.query<INODE[], void | string>({
-      query: (slug = "") => ({
-        url: `categories/${slug}`,
-      }),
-      providesTags: ["Nodes"],
-    }),
-    getCategory: builder.query<INODE, string>({
-      query: (slug = "chua-linh-ung") => ({
-        url: `categories/slug/${slug}`,
+    getNodesByPlaceId: builder.query<INODE[], void | string>({
+      query: (place_id = "") => ({
+        url: `nodes/?place_id=${place_id}`,
       }),
       providesTags: ["Nodes"],
     }),
   }),
 });
+
+export const { useLazyGetNodesByPlaceIdQuery } = nodeApi;
