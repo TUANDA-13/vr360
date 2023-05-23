@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.558434aa.css",
-    "main.js": "/static/js/main.29effbf2.js",
+    "main.js": "/static/js/main.da99ca72.js",
     "static/js/27.eb36e551.chunk.js": "/static/js/27.eb36e551.chunk.js",
     "static/media/background.jpg": "/static/media/background.beb7e0007cb6179a9e2d.jpg",
     "static/media/banana-marker.gif": "/static/media/banana-marker.9535e3992f8e19e95e35.gif",
@@ -13,6 +13,6 @@
   },
   "entrypoints": [
     "static/css/main.558434aa.css",
-    "static/js/main.29effbf2.js"
+    "static/js/main.da99ca72.js"
   ]
 }
