@@ -28,10 +28,24 @@ export const constants = {
         {
           id: "marker-1",
           image: BananaMarker,
-          tooltip: "Da Nang City",
+          tooltip: "Go to this place",
           size: { width: 250, height: 250 },
           anchor: "top left",
-          gps: [20, 10, 45],
+          gps: [20, 0, 270],
+        },
+        {
+          // image marker that opens the panel when clicked
+          id: "image",
+          gps: [2, 0, 90],
+          image:
+            "https://photo-sphere-viewer-data.netlify.app/assets/" +
+            "pictos/pin-blue.png",
+          size: { width: 32, height: 32 },
+          anchor: "bottom center",
+          zoomLvl: 100,
+          tooltip: "A image marker. <b>Click me!</b>",
+          // content: document.getElementById("lorem-content")?.innerHTML,
+          content: `<div>Hello</div>`,
         },
       ],
       gps: [-80.156479, 25.666725, 3],
@@ -59,7 +73,7 @@ export const constants = {
         {
           // image marker that opens the panel when clicked
           id: "image",
-          position: { yaw: 0.32, pitch: 0.11 },
+          gps: [2, 0, 90],
           image:
             "https://photo-sphere-viewer-data.netlify.app/assets/" +
             "pictos/pin-blue.png",
@@ -159,24 +173,11 @@ export const constants = {
           nodeId: "f4b38dcf-d435-4ea1-acfa-a6a1b38591db",
         },
       ],
-      panoData: { poseHeading: 320 },
-    },
-    {
-      id: "f451a15a-d01c-4a7d-b18d-631137aff8a6",
-      name: "Cổng chùa",
-      description: "<p>Đ&acirc;y l&agrave; cổng ch&ugrave;a</p>",
-      panorama:
-        "http://localhost:8000/media/nodes/cong-chua/5d7ee823-f07b-11ed-9b28-94e6f7246854.png",
-      thumbnail:
-        "http://localhost:8000/media/nodes/cong-chua/efce534a-f07a-11ed-bdf7-94e6f7246854.jpg",
-      gps: [16.09949520771872, 108.27750153669905, 2.0],
-      place: "60786bf8-62f2-457b-8100-60360069b787",
-      links: [
-        {
-          nodeId: "c4b32625-597d-40e0-b3b6-5003621f213f",
-        },
-      ],
-      panoData: { poseHeading: 320 },
+      panoData: {
+        poseHeading: 320,
+      },
+      first: false,
+      marker: [],
     },
     {
       id: "f4b38dcf-d435-4ea1-acfa-a6a1b38591db",
@@ -186,14 +187,35 @@ export const constants = {
         "http://localhost:8000/media/nodes/cac-vi-la-han/3c82632b-f07d-11ed-bb78-94e6f7246854.jpg",
       thumbnail:
         "http://localhost:8000/media/nodes/cac-vi-la-han/54eac4d1-f07d-11ed-8348-94e6f7246854.jpg",
-      gps: [16.100004812188818, 108.27755249867302, 2.0],
+      gps: [16.09995775237078, 108.27751994041334, 2.0],
       place: "60786bf8-62f2-457b-8100-60360069b787",
       links: [
         {
           nodeId: "c4b32625-597d-40e0-b3b6-5003621f213f",
         },
       ],
-      panoData: { poseHeading: 30 },
+      panoData: {
+        poseHeading: 30,
+      },
+      first: false,
+      marker: [
+        {
+          id: "06dae5f7-d3f4-4f1f-a619-fa29773aeed8",
+          gps: [2.0, 40.0, 2.0],
+          image:
+            "https://photo-sphere-viewer-data.netlify.app/assets/pictos/pin-blue.png",
+          size: {
+            width: 32,
+            height: 32,
+          },
+          anchor: "top left",
+          created_at: "2023-05-21T20:36:38+07:00",
+          updated_at: "2023-05-21T20:37:12.081377+07:00",
+          tooltip: "<p>Click me!!!</p>",
+          content: "<p>Đ&acirc;y l&agrave; marker của node</p>",
+          node: "f4b38dcf-d435-4ea1-acfa-a6a1b38591db",
+        },
+      ],
     },
   ],
   fields: [

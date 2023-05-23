@@ -16,4 +16,4 @@ export const nodeApi = createApi({
   }),
 });
 
-export const { useLazyGetNodesByPlaceIdQuery } = nodeApi;
+export const { useLazyGetNodesByPlaceIdQuery, useGetNodesByPlaceIdQuery } = nodeApi;

@@ -36,15 +36,15 @@ const StyledButton = styled(Button)({
 });
 interface LocationInformationCardProps {
   place_info: IPlace;
+  onClick: any;
 }
 const LocationInformationCard = ({
   place_info,
+  onClick
 }: LocationInformationCardProps) => {
   let { information } = place_info;
+  console.log(place_info);
   let information_json = JSON.parse(information as any);
-  const handleClickButtonViewMore = () => {
-    window.open("http://localhost:3000/virtual-tourism-3d", "_blank");
-  };
   return (
     <Stack direction="column">
       <Box component="div" className="card-container-header">
@@ -92,9 +92,7 @@ const LocationInformationCard = ({
         </TableContainer>
       </Box>
       <Box component="div" className="card-footer">
-        <StyledButton onClick={handleClickButtonViewMore}>
-          Xem thêm
-        </StyledButton>
+        <StyledButton onClick={onClick}>Xem thêm</StyledButton>
       </Box>
     </Stack>
   );

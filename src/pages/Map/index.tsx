@@ -16,6 +16,7 @@ import { useLazyGetCategoryQuery } from "../../services/categoryApi";
 import { ICategory, IPlace } from "../../types/place";
 import { useGetAllCategoriesQuery } from "../../services/categoryApi";
 import { ReactComponent as SettingIcon } from "../../assets/icons/icons8-settings.svg";
+import { useNavigate } from "react-router-dom";
 export const MapContext = createContext(null);
 const Map = () => {
   const [categoryState, setCategoryState] = useState<string>("");
@@ -29,8 +30,11 @@ const Map = () => {
   const [isShowMode, setIsShowMode] = useState(false);
   const [mapStyle, setMapStyle] = useState("REACT_APP_MAP_STYLE_STREETS");
   const [showSetting, setShowSetting] = useState(false);
+  const navigate = useNavigate();
+  // navigate("/virtual-tourism-3d");
   useEffect(() => {
     setCategoryState("chua-linh-ung");
+    // navigate("/virtual-tourism-3d");
   }, []);
 
   useEffect(() => {
@@ -45,6 +49,7 @@ const Map = () => {
       }
     });
   }, [categories]);
+
   useEffect(() => {
     if (map.current) {
       setMapContextValue(map.current);
@@ -229,7 +234,9 @@ const Map = () => {
       popupContent.className = "info-popup-container";
       popup.setLngLat(e?.lngLat).setDOMContent(popupContent).addTo(map.current);
       ReactDOM.createRoot(popupContent).render(
-        <LocationInformationCard place_info={place_info} />
+        <LocationInformationCard place_info={place_info} onClick={()=>{
+          window.open("/virtual-tourism-3d/"+place_info.id);
+        }}/>
       );
     };
 

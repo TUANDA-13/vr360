@@ -6,6 +6,6 @@ export const loadMap = (container: any, mapStyle: any) => {
     container,
     style: mapStyle,
     center: [108.2022, 16.0544], // tọa độ trung tâm [lng, lat]
-    zoom: 3, // mức zoom
+    zoom: 8, // mức zoom
   });
 };
