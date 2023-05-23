@@ -8,21 +8,24 @@ import {
 } from "react-photo-sphere-viewer";
 import Loading from "../../assets/icons/loading.gif";
 import { constants } from "../../constants";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import { useLazyGetNodesByPlaceIdQuery } from "../../services/nodeApi";
 import { INODE } from "../../types/node";
+import { useParams } from "react-router-dom";
+import { useGetNodesByPlaceIdQuery } from "../../services/nodeApi";
+import nodeService from "../../services/NodeService";
 
 const VR360 = () => {
-  let { place_id } = useParams(); 
-      const [getAllNodesById] =
-        useLazyGetNodesByPlaceIdQuery();
-  const [nodes, setNode] = useState<INODE[]>([]);
+  const { place_id } = useParams();
+  const { data: nodes } = useGetNodesByPlaceIdQuery(place_id);
+
+  const [getAllNodesById] = useLazyGetNodesByPlaceIdQuery();
+  // const [nodes, setNode] = useState<INODE[]>([]);
   useEffect(() => {
     getAllNodesById(place_id)
       .unwrap()
       .then((data: INODE[]) => {
-        setNode(data);
+        // setNode(data);
       });
   }, [place_id, getAllNodesById]);
 
@@ -45,18 +48,11 @@ const VR360 = () => {
     [GalleryPlugin],
   ];
   const loadVirtualTourPlugin = async (instance: any) => {
-    let nodes_data:INODE[] = []
-    await getAllNodesById(place_id)
-      .unwrap()
-      .then((data: INODE[]) => {
-        nodes_data = data
-      });
+
+    const nodes_data = await nodeService.getNodes(place_id);
     const virtualTourPlugin = instance.getPlugin(VirtualTourPlugin);
     if (!virtualTourPlugin) return;
-    virtualTourPlugin.setNodes(
-      nodes_data,
-      "c4b32625-597d-40e0-b3b6-5003621f213f"
-    );
+    virtualTourPlugin.setNodes(constants.nodes, nodes_data[0]);
     const galleryPlugin = instance.getPlugin(GalleryPlugin);
     galleryPlugin.setItems(nodes);
     const markersPlugin = instance.getPlugin(MarkersPlugin);

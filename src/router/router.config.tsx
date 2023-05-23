@@ -19,6 +19,6 @@ export const routesConfig: RouteConfig[] = [
   },
   {
     path: RouterPath.NOTFOUND,
-    component: Map,
+    component: Home,
   },
 ];

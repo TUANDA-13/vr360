@@ -15,7 +15,7 @@ export const categoryAPI = createApi({
     }),
     getCategory: builder.query<ICategory, string>({
       query: (slug = "chua-linh-ung") => ({
-        url: `categories/slug/${slug}`,
+        url: `categories/slug/${slug}/`,
       }),
       providesTags: ["Categories"],
     }),
