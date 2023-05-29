@@ -3,10 +3,13 @@ import Button from "@mui/material/Button/Button";
 import { useRef } from "react";
 import Vloumn from "../../../assets/images/sound.png";
 import { useState, useEffect } from "react";
-export const AudioPlayer = () => {
+interface AudioPlayerInterFace {
+  url: string;
+}
+export const AudioPlayer = ({ url }: AudioPlayerInterFace) => {
   const [isPlay, setIsPlay] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
+  console.log(url);
   const playAudio = () => {
     audioRef.current?.play();
   };
@@ -21,7 +24,7 @@ export const AudioPlayer = () => {
     } else {
       pauseAudio();
     }
-  }, [isPlay]);
+  }, [isPlay, url]);
   return (
     <Box>
       <Box position="absolute" right="0px">
@@ -33,10 +36,7 @@ export const AudioPlayer = () => {
             visibility: "hidden",
           }}
         >
-          <source
-            src="https://res.cloudinary.com/dssmcuelj/video/upload/v1684940260/nc8vv1xvzu3xy2hzgist.wav"
-            type="audio/wav"
-          />
+          <source src={url} type="audio/wav" />
         </audio>
       </Box>
       <Button

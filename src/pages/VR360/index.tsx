@@ -24,8 +24,8 @@ const VR360 = () => {
   const [showSetting, setShowSetting] = useState(false);
   const { place_id } = useParams();
   const { data: nodes } = useGetNodesByPlaceIdQuery(place_id);
-
   const [getAllNodesById] = useLazyGetNodesByPlaceIdQuery();
+  const [currentNode, setCurrentNode] = useState<INODE | null>(null);
   // const [nodes, setNode] = useState<INODE[]>([]);
   useEffect(() => {
     getAllNodesById(place_id)
@@ -66,8 +66,9 @@ const VR360 = () => {
     });
     virtualTourPlugin.addEventListener(
       "node-changed",
-      ({ node, data }: any) => {
-        console.log(`Current node is ${node.id}`);
+      ({ node, data }: { node: INODE; data: any }) => {
+        console.log(`Current node is ${node}`);
+        setCurrentNode(node);
         if (data.fromNode) {
           console.log(`Previous node was ${data.fromNode.id}`);
         }
@@ -129,7 +130,7 @@ const VR360 = () => {
             my="4px"
             width="auto"
           ></Box>
-          <AudioPlayer />
+          <AudioPlayer url={currentNode?.audio_url || ""} />
         </Box>
       )}
       {/* <MapContent /> */}
