@@ -19,6 +19,7 @@ export interface INODE {
   };
   first: boolean;
   maker?: IMAKER[];
+  audio_url: string | null;
 }
 
 export interface IMAKER {

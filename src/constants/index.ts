@@ -1,5 +1,4 @@
 import BananaMarker from "../assets/icons/banana-marker.gif";
-import pano from "../assets/images/background.jpg";
 export const constants = {
   REACT_APP_MAP_ACCESS_TOKEN: process.env.REACT_APP_MAP_ACCESS_TOKEN,
   REACT_APP_BASE_URL_FAKE_360_IMAGE:
@@ -18,38 +17,34 @@ export const constants = {
   virtualTourNodes: [
     {
       id: "1",
-      panorama: pano,
+      panorama:
+        "https://photo-sphere-viewer-data.netlify.app/assets/" +
+        "tour/key-biscayne-2.jpg",
       thumbnail:
         "https://photo-sphere-viewer-data.netlify.app/assets/" +
-        "tour/key-biscayne-1-thumb.jpg",
-      name: "One",
+        "tour/key-biscayne-2-thumb.jpg",
+      name: "Two",
       links: [{ nodeId: "2" }],
       markers: [
         {
-          id: "marker-1",
-          image: BananaMarker,
-          tooltip: "Go to this place",
-          size: { width: 250, height: 250 },
-          anchor: "top left",
-          gps: [20, 0, 270],
-        },
-        {
-          // image marker that opens the panel when clicked
-          id: "image",
-          gps: [2, 0, 90],
+          id: "06dae5f7-d3f4-4f1f-a619-fa29773aeed8",
+          gps: [2.0, 40.0, 2.0],
           image:
-            "https://photo-sphere-viewer-data.netlify.app/assets/" +
-            "pictos/pin-blue.png",
-          size: { width: 32, height: 32 },
-          anchor: "bottom center",
-          zoomLvl: 100,
-          tooltip: "A image marker. <b>Click me!</b>",
-          // content: document.getElementById("lorem-content")?.innerHTML,
-          content: `<div>Hello</div>`,
+            "https://photo-sphere-viewer-data.netlify.app/assets/pictos/pin-blue.png",
+          size: {
+            width: 32,
+            height: 32,
+          },
+          anchor: "top left",
+          created_at: "2023-05-21T20:36:38+07:00",
+          updated_at: "2023-05-21T20:37:12.081377+07:00",
+          tooltip: "<p>Click me!!!</p>",
+          content: "<p>Đ&acirc;y l&agrave; marker của node</p>",
+          node: "f4b38dcf-d435-4ea1-acfa-a6a1b38591db",
         },
       ],
-      gps: [-80.156479, 25.666725, 3],
-      // panoData: { poseHeading: 327 },
+      gps: [-80.156168, 25.666623, 3],
+      panoData: { poseHeading: 318 },
     },
     {
       id: "2",
