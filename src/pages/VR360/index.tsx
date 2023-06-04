@@ -19,6 +19,7 @@ import { AudioPlayer } from "./Sound";
 import { MapContent } from "./MapContent";
 import { MapChildren } from "./MapChildren";
 import { useState } from "react";
+import { AudioDefault } from "./DefaultSound";
 
 const VR360 = () => {
   const [showSetting, setShowSetting] = useState(false);
@@ -134,6 +135,7 @@ const VR360 = () => {
         </Box>
       )}
       {/* <MapContent /> */}
+      <AudioDefault />
     </Box>
   );
 };
