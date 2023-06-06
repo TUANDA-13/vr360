@@ -47,7 +47,7 @@ const Home = () => {
           <Typography variant="h2" className="name" fontWeight={700}>
             {renderTitle}
           </Typography>
-          <Typography variant="h5" textAlign="center" color="white">
+          <Typography variant="h5" textAlign="center" color="white" maxWidth="700px">
             Một ngôi chùa nổi tiếng ở Đà Nẵng, với kiến trúc độc đáo và vị trí
             đắc địa trên đỉnh núi Non Nước.
           </Typography>

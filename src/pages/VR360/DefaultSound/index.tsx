@@ -29,7 +29,7 @@ export const AudioDefault = () => {
         loop
         autoPlay
         style={{
-          // visibility: "hidden",
+          visibility: "hidden",
         }}
       >
         <source

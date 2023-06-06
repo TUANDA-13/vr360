@@ -12,7 +12,7 @@ const FieldPicker = ({
   categorySlug,
 }: CategoryStyleInterface) => {
   useEffect(() => {
-    console.log("hi")
+    console.log("hi");
     categories?.forEach((item: ICategory) => {
       if (item.slug === "chua-linh-ung") {
         onCategoryChange(item.slug);
@@ -36,6 +36,7 @@ const FieldPicker = ({
       <Select
         variant="outlined"
         sx={{
+          width: "300px",
           color: "var(--main-content-text-color)",
           ".MuiOutlinedInput-notchedOutline": {
             borderColor: "transparent",

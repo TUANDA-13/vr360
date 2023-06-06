@@ -9,14 +9,14 @@ import {
 import Loading from "../../assets/icons/loading.gif";
 import { constants } from "../../constants";
 import { useEffect } from "react";
-import { useLazyGetNodesByPlaceIdQuery } from "../../services/nodeApi";
+// import { useLazyGetNodesByPlaceIdQuery } from "../../services/nodeApi";
+import Image from "../../assets/images/background.jpg";
 import { INODE } from "../../types/node";
 import { useParams } from "react-router-dom";
 import { useGetNodesByPlaceIdQuery } from "../../services/nodeApi";
-import nodeService from "../../services/NodeService";
+import nodeService from "../../services/nodeService";
 import Box from "@mui/material/Box/Box";
 import { AudioPlayer } from "./Sound";
-import { MapContent } from "./MapContent";
 import { MapChildren } from "./MapChildren";
 import { useState } from "react";
 import { AudioDefault } from "./DefaultSound";
@@ -25,16 +25,15 @@ const VR360 = () => {
   const [showSetting, setShowSetting] = useState(false);
   const { place_id } = useParams();
   const { data: nodes } = useGetNodesByPlaceIdQuery(place_id);
-  const [getAllNodesById] = useLazyGetNodesByPlaceIdQuery();
+  // const [getAllNodesById] = useLazyGetNodesByPlaceIdQuery();
   const [currentNode, setCurrentNode] = useState<INODE | null>(null);
-  // const [nodes, setNode] = useState<INODE[]>([]);
-  useEffect(() => {
-    getAllNodesById(place_id)
-      .unwrap()
-      .then((data: INODE[]) => {
-        // setNode(data);
-      });
-  }, [place_id, getAllNodesById]);
+  // useEffect(() => {
+  //   getAllNodesById(place_id)
+  //     .unwrap()
+  //     .then((data: INODE[]) => {
+  //       // setNode(data);
+  //     });
+  // }, [place_id, getAllNodesById]);
 
   useEffect(() => {
     console.log(nodes);
@@ -54,14 +53,23 @@ const VR360 = () => {
     [MarkersPlugin],
     [GalleryPlugin],
   ];
+
   const loadVirtualTourPlugin = async (instance: any) => {
     const nodes_data = await nodeService.getNodes(place_id);
     const virtualTourPlugin = instance.getPlugin(VirtualTourPlugin);
     if (!virtualTourPlugin) return;
+    // virtualTourPlugin.setNodes(nodes_data, nodes_data[0]);
     virtualTourPlugin.setNodes(nodes_data, nodes_data[0]);
+    // virtualTourPlugin.setNodes(nodes_data, nodeService.findNodeFirstId(nodes_data) || nodes_data[0]);
+
     const galleryPlugin = instance.getPlugin(GalleryPlugin);
     galleryPlugin.setItems(nodes);
     const markersPlugin = instance.getPlugin(MarkersPlugin);
+    const special_node = nodes_data?.filter((item: INODE) => {
+      return item.special_node;
+    });
+    const thumbnail = special_node.map((item: INODE) => ({ ...item, name: item.special_name || item.name }));
+    galleryPlugin.setItems(thumbnail);
     markersPlugin.addEventListener("select-marker", ({ marker }: any) => {
       console.log(`Clicked on marker ${marker.id}`);
     });
@@ -100,7 +108,7 @@ const VR360 = () => {
           {
             id: "my-button",
             title: "Toggle panel",
-            content: "🆘",
+            content: "",
             onClick: () => {
               console.log("hello world");
             },
