@@ -53,22 +53,6 @@ export const AudioPlayer = ({ url }: AudioPlayerInterFace) => {
   }, [url]);
   return (
     <Box>
-      {/* <Box position="absolute" right="0px">
-        {audiourl && (
-          <audio
-            ref={audioRef}
-            controls
-            autoPlay
-            style={{
-              // visibility: "hidden",
-              // position: "absolute",
-              left: "-320px",
-            }}
-          >
-            <source src={audiourl} type="audio/wav" />
-          </audio>
-        )}
-      </Box> */}
       <Audio />
       <Button
         onClick={() => {

@@ -16,7 +16,7 @@ import { useLazyGetCategoryQuery } from "../../services/categoryApi";
 import { ICategory, IPlace } from "../../types/place";
 import { useGetAllCategoriesQuery } from "../../services/categoryApi";
 import { ReactComponent as SettingIcon } from "../../assets/icons/icons8-settings.svg";
-import { useNavigate } from "react-router-dom";
+import placeService from "./../../services/placeService/index";
 export const MapContext = createContext(null);
 const Map = () => {
   const [categoryState, setCategoryState] = useState<string>("");
@@ -30,26 +30,114 @@ const Map = () => {
   const [isShowMode, setIsShowMode] = useState(false);
   const [mapStyle, setMapStyle] = useState("REACT_APP_MAP_STYLE_STREETS");
   const [showSetting, setShowSetting] = useState(false);
-  const navigate = useNavigate();
-  // navigate("/virtual-tourism-3d");
+  const select = useRef<HTMLDivElement>(null)
   useEffect(() => {
     setCategoryState("chua-linh-ung");
-    // navigate("/virtual-tourism-3d");
   }, []);
 
-  useEffect(() => {
-    categories?.forEach((item) => {
-      if (item?.svg) {
-        (map.current as any).loadImage(item.svg, (error: any, image: any) => {
-          if (error) throw error;
-          console.log(item.svg);
-
-          (map.current as any).addImage(item.id, image);
-        });
-      }
+  const handleAddSource = async () => {
+    const mapMarkerBlue = new Image(40, 40);
+    mapMarkerBlue.onload = () =>
+      (map.current as any).addImage("map-marker-blue", mapMarkerBlue);
+    mapMarkerBlue.src = mapMarkerBlueSvg;
+    (map.current as any).addSource("place", {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        crs: {
+          type: "name",
+          properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+        },
+        features: [
+          places?.map((item: IPlace) => {
+            return {
+              type: "Feature",
+              properties: {
+                ...item,
+                "marker-type": "blue",
+                icon: "map-marker-blue",
+              },
+              geometry: {
+                type: "Point",
+                coordinates: [item.lng, item.lat],
+              },
+            };
+          }),
+        ],
+      },
+      cluster: true,
+      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
     });
-  }, [categories]);
+    (map.current as any).addLayer({
+      id: "clusters",
+      type: "circle",
+      source: "place",
+      filter: ["has", "point_count"],
+      paint: {
+        "circle-color": [
+          "step",
+          ["get", "point_count"],
+          "#51bbd6",
+          100,
+          "#f1f075",
+          750,
+          "#f28cb1",
+        ],
+        "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+      },
+    });
+    (map.current as any).addLayer({
+      id: "cluster-count",
+      type: "symbol",
+      source: "place",
+      filter: ["has", "point_count"],
+      layout: {
+        "text-field": ["get", "point_count_abbreviated"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 12,
+      },
+    });
+    (map.current as any).addLayer({
+      id: "unclustered-point",
+      type: "symbol",
+      source: "place",
+      layout: {
+        "icon-image": "{icon}",
+        "icon-allow-overlap": true,
+        "icon-size": 1,
+      },
+    });
+    // inspect a cluster on click
+    (map.current as any).on("click", "clusters", (e: any) => {
+      const features = (map.current as any).queryRenderedFeatures(e.point, {
+        layers: ["clusters"],
+      });
+      const clusterId = features[0].properties.cluster_id;
+      (map.current as any)
+        .getSource("place")
+        .getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
+          if (err) return;
+          (map.current as any).easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom,
+          });
+        });
+    });
 
+    (map.current as any).on("mouseenter", "clusters", () => {
+      (map.current as any).getCanvas().style.cursor = "pointer";
+    });
+    (map.current as any).on("mouseleave", "clusters", () => {
+      (map.current as any).getCanvas().style.cursor = "";
+    });
+    (map.current as any).on("mouseenter", "unclustered-point", () => {
+      (map.current as any).getCanvas().style.cursor = "pointer";
+    });
+    (map.current as any).on("mouseleave", "unclustered-point", () => {
+      (map.current as any).getCanvas().style.cursor = "";
+    });
+  };
   useEffect(() => {
     if (map.current) {
       setMapContextValue(map.current);
@@ -79,145 +167,39 @@ const Map = () => {
         (map.current as any).addImage("map-marker-blue", mapMarkerBlue);
       mapMarkerBlue.src = mapMarkerBlueSvg;
 
-      // (map.current as any).addSource("markers", {
-      //   type: "geojson",
-      //   data: {
-      //     type: "FeatureCollection",
-      //     features: [
-      //       {
-      //         type: "Feature",
-      //         properties: {
-      //           "marker-type": "blue",
-      //           icon: "map-marker-blue",
-      //         },
-      //         geometry: {
-      //           type: "Point",
-      //           coordinates: [105.84228515625, 21.022982546427425],
-      //         },
-      //       },
-      //     ],
-      //   },
-      // });
-
-      // (map.current as any).addLayer({
-      //   id: "markers",
-      //   type: "symbol",
-      //   source: "markers",
-      //   layout: {
-      //     // 'icon-image': ['match', ['get', 'marker-type'], 'red', 'map-marker-red', 'map-marker-blue'],
-      //     "icon-image": "{icon}",
-      //     "icon-allow-overlap": true,
-      //     "icon-size": 1,
-      //   },
-      // });
-
-      (map.current as any).addSource("place", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          crs: {
-            type: "name",
-            properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
-          },
-          features: [
-            category?.places?.map((item: IPlace) => {
-              return {
-                type: "Feature",
-                properties: {
-                  ...item,
-                  "marker-type": "blue",
-                  icon: "map-marker-blue",
-                },
-                geometry: {
-                  type: "Point",
-                  coordinates: [item.lng, item.lat],
-                },
-              };
-            }),
-          ],
-        },
-        cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
-      });
-      (map.current as any).addLayer({
-        id: "clusters",
-        type: "circle",
-        source: "place",
-        filter: ["has", "point_count"],
-        paint: {
-          "circle-color": [
-            "step",
-            ["get", "point_count"],
-            "#51bbd6",
-            100,
-            "#f1f075",
-            750,
-            "#f28cb1",
-          ],
-          "circle-radius": [
-            "step",
-            ["get", "point_count"],
-            20,
-            100,
-            30,
-            750,
-            40,
-          ],
-        },
-      });
-      (map.current as any).addLayer({
-        id: "cluster-count",
-        type: "symbol",
-        source: "place",
-        filter: ["has", "point_count"],
-        layout: {
-          "text-field": ["get", "point_count_abbreviated"],
-          "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-          "text-size": 12,
-        },
-      });
-      (map.current as any).addLayer({
-        id: "unclustered-point",
-        type: "symbol",
-        source: "place",
-        layout: {
-          "icon-image": "{icon}",
-          "icon-allow-overlap": true,
-          "icon-size": 1,
-        },
-      });
-      // inspect a cluster on click
-      (map.current as any).on("click", "clusters", (e: any) => {
-        const features = (map.current as any).queryRenderedFeatures(e.point, {
-          layers: ["clusters"],
+      (map.current as any).on("style.load", async () => {
+        handleAddSource();
+        handleChangePlace();
+        let linh = {
+          places: [],
+        };
+        console.log(categoryState);
+        await placeService.getPlacesApi("chua-linh-ung").then((res) => {
+          linh = res;
+          console.log(res);
         });
-        const clusterId = features[0].properties.cluster_id;
-        (map.current as any)
-          .getSource("place")
-          .getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-            if (err) return;
-            (map.current as any).easeTo({
-              center: features[0].geometry.coordinates,
-              zoom: zoom,
-            });
-          });
-      });
+         let placeData = {
+           type: "FeatureCollection",
+           features: linh?.places?.map((item: IPlace) => {
+             return {
+               type: "Feature",
+               properties: {
+                 ...item,
+                 "marker-type": "blue",
+                 icon: "map-marker-blue",
+               },
+               geometry: {
+                 type: "Point",
+                 coordinates: [item.lng, item.lat],
+               },
+             };
+           }),
+         };
 
-      (map.current as any).on("mouseenter", "clusters", () => {
-        (map.current as any).getCanvas().style.cursor = "pointer";
+         (map.current as any)?.getSource("place")?.setData(placeData);
       });
-      (map.current as any).on("mouseleave", "clusters", () => {
-        (map.current as any).getCanvas().style.cursor = "";
-      });
-      (map.current as any).on("mouseenter", "unclustered-point", () => {
-        (map.current as any).getCanvas().style.cursor = "pointer";
-      });
-      (map.current as any).on("mouseleave", "unclustered-point", () => {
-        (map.current as any).getCanvas().style.cursor = "";
-      });
+      handleAddSource();
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   });
 
   useEffect(() => {
@@ -234,9 +216,12 @@ const Map = () => {
       popupContent.className = "info-popup-container";
       popup.setLngLat(e?.lngLat).setDOMContent(popupContent).addTo(map.current);
       ReactDOM.createRoot(popupContent).render(
-        <LocationInformationCard place_info={place_info} onClick={()=>{
-          window.open("/virtual-tourism-3d/"+place_info.id);
-        }}/>
+        <LocationInformationCard
+          place_info={place_info}
+          onClick={() => {
+            window.open("/virtual-tourism-3d/" + place_info.id);
+          }}
+        />
       );
     };
 
@@ -301,8 +286,7 @@ const Map = () => {
     setPlaces(category?.places);
   }, [category]);
 
-  useEffect(() => {
-    console.log(places);
+  const handleChangePlace = () => {
     let placeData = {
       type: "FeatureCollection",
       features: places?.map((item: IPlace) => {
@@ -322,8 +306,11 @@ const Map = () => {
     };
 
     (map.current as any)?.getSource("place")?.setData(placeData);
-
-    map.current as any;
+  };
+  useEffect(() => {
+    console.log(places);
+    handleChangePlace();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [places]);
   return (
     <MapContext.Provider value={mapContextValue}>
@@ -332,7 +319,7 @@ const Map = () => {
         component="div"
         position="absolute"
         top="32px"
-        width="auto"
+        maxWidth="1200px"
         right="98px"
       >
         {showSetting && (
