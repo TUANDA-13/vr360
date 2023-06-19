@@ -4,7 +4,7 @@ export interface INODE {
   description: string;
   panorama: string;
   thumbnail: string;
-  gps: [];
+  gps: number[];
   place: string;
   links: [
     {
@@ -21,7 +21,12 @@ export interface INODE {
   maker?: IMAKER[];
   audio_url: string | null;
   special_node: boolean;
-  special_name:boolean;
+  special_name: boolean;
+  map?: {
+    x?: number;
+    y?: number;
+    color?: string;
+  };
 }
 
 export interface IMAKER {
