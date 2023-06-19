@@ -9,7 +9,7 @@ export const categoryAPI = createApi({
   endpoints: (builder) => ({
     getAllCategories: builder.query<ICategory[], void | string>({
       query: (slug = "") => ({
-        url: `categories/${slug}`,
+        url: `categories/${slug}/`,
       }),
       providesTags: ["Categories"],
     }),
@@ -22,4 +22,8 @@ export const categoryAPI = createApi({
   }),
 });
 
-export const { useGetAllCategoriesQuery, useLazyGetCategoryQuery, useLazyGetAllCategoriesQuery } = categoryAPI;
+export const {
+  useGetAllCategoriesQuery,
+  useLazyGetCategoryQuery,
+  useLazyGetAllCategoriesQuery,
+} = categoryAPI;
