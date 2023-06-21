@@ -9,7 +9,7 @@ export const categoryAPI = createApi({
   endpoints: (builder) => ({
     getAllCategories: builder.query<ICategory[], void | string>({
       query: (slug = "") => ({
-        url: `categories/${slug}/`,
+        url: `categories/`,
       }),
       providesTags: ["Categories"],
     }),
