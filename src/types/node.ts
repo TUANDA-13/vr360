@@ -33,6 +33,10 @@ export interface IMAKER {
   id: string;
   tooltip: string;
   content: string;
-  gps: [];
-  image: string;
+  gps?: number[];
+  image?: any;
+  size?: {};
+  created_at?: any;
+  updated_at?: any;
+  node?: any;
 }
