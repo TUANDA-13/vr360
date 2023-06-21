@@ -1,5 +1,5 @@
 const path = require("path");
-
+console.log(process.env);
 module.exports = {
   entry: "./src/index.tsx",
   output: {
