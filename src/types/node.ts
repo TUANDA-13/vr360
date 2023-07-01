@@ -27,6 +27,7 @@ export interface INODE {
     y?: number;
     color?: string;
   };
+  caption?: string;
 }
 
 export interface IMAKER {

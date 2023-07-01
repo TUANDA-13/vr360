@@ -16,10 +16,11 @@ import { useLazyGetCategoryQuery } from "../../services/categoryApi";
 import { ICategory, IPlace } from "../../types/place";
 import { useGetAllCategoriesQuery } from "../../services/categoryApi";
 import { ReactComponent as SettingIcon } from "../../assets/icons/icons8-settings.svg";
-import placeService from "./../../services/placeService/index";
+import categoryService from "../../services/categoryService";
+
 export const MapContext = createContext(null);
 const Map = () => {
-  const [categoryState, setCategoryState] = useState<string>("");
+  const [categoryState, setCategoryState] = useState<string>("1");
   const [getCategory, { data: category }] = useLazyGetCategoryQuery();
   const { data: categories } = useGetAllCategoriesQuery();
   const [places, setPlaces] = useState<any>([]);
@@ -30,7 +31,7 @@ const Map = () => {
   const [isShowMode, setIsShowMode] = useState(false);
   const [mapStyle, setMapStyle] = useState("REACT_APP_MAP_STYLE_STREETS");
   const [showSetting, setShowSetting] = useState(false);
-  const select = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     setCategoryState("chua-linh-ung");
   }, []);
@@ -138,6 +139,7 @@ const Map = () => {
       (map.current as any).getCanvas().style.cursor = "";
     });
   };
+
   useEffect(() => {
     if (map.current) {
       setMapContextValue(map.current);
@@ -173,30 +175,31 @@ const Map = () => {
         let linh = {
           places: [],
         };
-        console.log(categoryState);
-        await placeService.getPlacesApi("chua-linh-ung").then((res) => {
-          linh = res;
-          console.log(res);
-        });
-         let placeData = {
-           type: "FeatureCollection",
-           features: linh?.places?.map((item: IPlace) => {
-             return {
-               type: "Feature",
-               properties: {
-                 ...item,
-                 "marker-type": "blue",
-                 icon: "map-marker-blue",
-               },
-               geometry: {
-                 type: "Point",
-                 coordinates: [item.lng, item.lat],
-               },
-             };
-           }),
-         };
+        setCategoryState("chua-linh-ung");
+        await categoryService
+          .getPlacesByCategory("chua-linh-ung")
+          .then((res) => {
+            linh = res;
+          });
+        let placeData = {
+          type: "FeatureCollection",
+          features: linh?.places?.map((item: IPlace) => {
+            return {
+              type: "Feature",
+              properties: {
+                ...item,
+                "marker-type": "blue",
+                icon: "map-marker-blue",
+              },
+              geometry: {
+                type: "Point",
+                coordinates: [item.lng, item.lat],
+              },
+            };
+          }),
+        };
 
-         (map.current as any)?.getSource("place")?.setData(placeData);
+        (map.current as any)?.getSource("place")?.setData(placeData);
       });
       handleAddSource();
     });
@@ -308,7 +311,6 @@ const Map = () => {
     (map.current as any)?.getSource("place")?.setData(placeData);
   };
   useEffect(() => {
-    console.log(places);
     handleChangePlace();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [places]);

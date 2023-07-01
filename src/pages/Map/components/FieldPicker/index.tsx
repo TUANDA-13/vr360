@@ -12,7 +12,6 @@ const FieldPicker = ({
   categorySlug,
 }: CategoryStyleInterface) => {
   useEffect(() => {
-    console.log("hi");
     categories?.forEach((item: ICategory) => {
       if (item.slug === "chua-linh-ung") {
         onCategoryChange(item.slug);
