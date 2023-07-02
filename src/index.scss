@@ -1,0 +1,23 @@
+
+*,
+*::before,
+*::after {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Lexend' !important;
+  transition: 0.3s;
+}
+body {
+  user-select: none;
+  scroll-behavior: smooth;
+}
+:root {
+  --main-bg-color: #fff;
+  --main-content-text-color: #000;
+  --main-em-color: red;
+  --main-hover-color: #0055a5;
+  --main-text-color: #5271ff;
+  --btn-explore: #DBDFEA;
+}

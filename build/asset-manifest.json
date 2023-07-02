@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.558434aa.css",
+    "main.js": "/static/js/main.75f8f0f2.js",
+    "static/js/27.eb36e551.chunk.js": "/static/js/27.eb36e551.chunk.js",
+    "static/media/background.jpg": "/static/media/background.beb7e0007cb6179a9e2d.jpg",
+    "static/media/logo-chualinhung.svg": "/static/media/logo-chualinhung.f1a6397074b81fdd79e5e8284c1cd3c1.svg",
+    "static/media/marker-chualinhung.svg": "/static/media/marker-chualinhung.1ffb5991fb4a7053c2b9ce640b9c1de8.svg",
+    "static/media/banana-marker.gif": "/static/media/banana-marker.9535e3992f8e19e95e35.gif",
+    "static/media/img-error-message.png": "/static/media/img-error-message.0feb1794c95c8ef5cd44.png",
+    "index.html": "/index.html",
+    "static/media/sound.svg": "/static/media/sound.08c4e9a0206c3de5c8867a5a72431209.svg",
+    "static/media/mute.svg": "/static/media/mute.c4f558347838d355a34382313a2a6c37.svg",
+    "static/media/icons8-settings.svg": "/static/media/icons8-settings.ea1d0e48aa4244fbe6830df8cf45b1f3.svg",
+    "static/media/map-marker-blue.svg": "/static/media/map-marker-blue.dda1f638757171835e7aaaba5d8ba72e.svg"
+  },
+  "entrypoints": [
+    "static/css/main.558434aa.css",
+    "static/js/main.75f8f0f2.js"
+  ]
+}
