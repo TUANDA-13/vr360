@@ -15,7 +15,6 @@ const soundSlice = createSlice({
   reducers: {
     play(state) {
       state.play = !state.play ;
-      console.log(state.play)
     },
   },
 });

@@ -21,7 +21,6 @@ export const AudioPlayer = ({ url }: AudioPlayerInterFace) => {
   });
   const Audio = () => {
     useEffect(() => {
-      console.log(isTurnOnVolumn);
     }, [isTurnOnVolumn]);
 
     return (

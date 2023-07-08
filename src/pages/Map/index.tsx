@@ -30,7 +30,7 @@ const Map = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isShowMode, setIsShowMode] = useState(false);
   const [mapStyle, setMapStyle] = useState("REACT_APP_MAP_STYLE_STREETS");
-  const [showSetting, setShowSetting] = useState(false);
+  const [showSetting, setShowSetting] = useState(true);
 
   useEffect(() => {
     setCategoryState("chua-linh-ung");

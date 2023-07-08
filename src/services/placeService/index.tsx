@@ -8,7 +8,6 @@ const placeService = {
       );
       return response.data;
     } catch (error) {
-      console.error(error);
       return null;
     }
   },
@@ -17,7 +16,6 @@ const placeService = {
       const response = await axiosInstance.get(`${placeService.entity}/${id}/`);
       return response.data;
     } catch (error) {
-      console.error(error);
       return null;
     }
   },

@@ -43,7 +43,6 @@ const LocationInformationCard = ({
   onClick
 }: LocationInformationCardProps) => {
   let { information } = place_info;
-  console.log(place_info);
   let information_json = JSON.parse(information as any);
   return (
     <Stack direction="column">

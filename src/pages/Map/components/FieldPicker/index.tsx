@@ -55,7 +55,6 @@ const FieldPicker = ({
         labelId="field-picker-label"
         value={categorySlug}
         onChange={(event) => {
-          console.log(event?.target?.value);
           onCategoryChange(event?.target?.value);
         }}
         inputProps={{

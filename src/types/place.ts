@@ -7,9 +7,16 @@ export interface IPlace {
   name: string;
   description?: string;
   thumbnail?: string;
+  map: any;
   lat: number;
   lng: number;
   slug: string;
+  x_min: number;
+  x_max: number;
+  y_min: number;
+  y_max: number;
+  map_width: number;
+  map_height: number;
 }
 
 export interface ICategory {
