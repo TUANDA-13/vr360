@@ -1,4 +1,3 @@
-
 *,
 *::before,
 *::after {
@@ -6,7 +5,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Lexend' !important;
+  font-family: "Lexend" !important;
   transition: 0.3s;
 }
 body {
@@ -19,5 +18,9 @@ body {
   --main-em-color: red;
   --main-hover-color: #0055a5;
   --main-text-color: #5271ff;
-  --btn-explore: #DBDFEA;
+  --btn-explore: #dbdfea;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

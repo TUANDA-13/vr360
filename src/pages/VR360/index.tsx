@@ -202,7 +202,7 @@ const VR360 = () => {
       {showSetting && (
         <Box
           position="absolute"
-          zIndex="100"
+          zIndex="78"
           display="flex"
           justifyContent="center"
           flexDirection="column"
@@ -218,7 +218,7 @@ const VR360 = () => {
       <div
         ref={thumbnailRef}
         className={`psv-gallery psv--capture-event`}
-        style={{ zIndex: 15 }}
+        style={{ zIndex: 80, paddingRight: "15px" }}
       >
         <div className="psv-gallery-container">
           {thumnailItems.map((item: INODE) => {

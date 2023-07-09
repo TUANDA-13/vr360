@@ -124,7 +124,10 @@ $psv-gallery-title-font: $psv-caption-font !default;
 $psv-gallery-title-color: $psv-caption-text-color !default;
 $psv-gallery-title-background: rgba(0, 0, 0, 0.6) !default;
 $psv-gallery-thumb-hover-scale: 1.2 !default;
-
+.psv-gallery::-webkit-scrollbar {
+  height: 0 !important;
+  display: none;
+}
 .psv-gallery {
   position: absolute;
   left: 0;
@@ -136,7 +139,11 @@ $psv-gallery-thumb-hover-scale: 1.2 !default;
   overflow-y: hidden;
   transition: transform ease-in-out 0.1s;
   transform: translateY(100%);
-  z-index: $psv-navbar-zindex;
+  z-index: 80;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
   @at-root .psv--has-navbar & {
     bottom: $psv-navbar-height;
@@ -152,6 +159,7 @@ $psv-gallery-thumb-hover-scale: 1.2 !default;
     display: flex;
     padding: $psv-gallery-padding;
     margin-bottom: 40px;
+    margin-right: 15px;
   }
 
   &-item {
@@ -234,6 +242,4 @@ $psv-gallery-thumb-hover-scale: 1.2 !default;
       z-index: 3;
     }
   }
-
-
 }
